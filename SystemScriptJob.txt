@@ -1,0 +1,32 @@
+      // identify parameters if needed
+      var moduleTriggerKey = "IMPORT";
+
+      // create unit of work
+      var uow = context.Api.CreateUnitOfWork();
+
+      // load the job information
+      var job = context.Api.Data.DbJob.Load.ByID(context.JobID).ThrowIfLoadFailed("ID", context.JobID);
+
+      // load the module information
+      var module = context.Api.Data.DbModule.Load.ByTriggerKey(moduleTriggerKey).ThrowIfLoadFailed("TriggerKey", moduleTriggerKey);
+
+      // create module trigger
+      var moduleTrigger = context.Api.Data.DbModuleTrigger.Create.FromParentNone();
+      moduleTrigger.TriggerDateTime = context.Now;
+      moduleTrigger.TriggerKey = moduleTriggerKey;
+      //moduleTrigger.Args = string.Empty;
+
+      // save module trigger
+      context.Api.Data.DbModuleTrigger.Save.InsertAsNew(moduleTrigger, uow);
+
+      // add additional functionality if needed
+
+      // execute the changes
+      var result = uow.ExecuteReturnsResultObject();
+      if(!result.Success)
+      {
+        context.Api.Util.Log.WriteErrorsFromResultObject(result, "System{0}.PostJob [ LS Script Error ]".FormatWith(this.ID));
+      }
+
+      // write to log
+      context.Api.Util.Log.WriteInformation("Job '{0}' has ended. Triggered {1} Module.".FormatWith(job.Name, moduleTriggerKey), "System{0}.PostJob [ LS Script Error ]".FormatWith(this.ID));

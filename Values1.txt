@@ -1,0 +1,6 @@
+// add fixed values 
+values["SystemID"] = <your Packaging Line 5 System ID>;
+values["OeeCalculationID"] = <your Packaging Line 5 KPI Calculation ID>;
+
+// return
+return Result<bool>.ReturnSuccessfulResult(true);

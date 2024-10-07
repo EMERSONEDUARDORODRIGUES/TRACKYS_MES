@@ -1,0 +1,13 @@
+      // custom properties dictionary
+      var cp = _system.CustomProperties;
+      // to load the values from the model into the values dictionary
+      this.Ets.Values.CopyFromModel(_system.CustomProperties, "System.CustomProperty.");
+
+      // to save the custom properties in a form
+      foreach (var kvp in _system.CustomProperties)
+      {
+        var cp = kvp.Value;
+        string formKey = "System.CustomProperty." + kvp.Key;
+        cp.Value = this.Ets.Form.UpdateModelValueByFormKey(formKey, cp.Value);
+      }
+      this.Ets.Api.Data.CustomProperty.MergeCustomProperties(_system, uow).ThrowIfFailed();

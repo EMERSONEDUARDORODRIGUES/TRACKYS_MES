@@ -1,0 +1,3 @@
+Start Here:
+
+https://portal.parsec-corp.com/hc/en-us/articles/360011683234-Preparing-Windows-Server-2019-for-TrakSYS-Installation

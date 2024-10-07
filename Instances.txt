@@ -1,0 +1,19 @@
+// add from sql
+string sql = @"
+SELECT
+  s.ID AS InstanceID,
+  s.[Key] AS InstanceKey,
+  s.Name AS NavigationTitle,
+  s.Name AS PageTitle
+FROM dbo.tSystem s
+  INNER JOIN dbo.tArea a ON (s.AreaID = a.ID)
+WHERE a.[Key] = N'PACK.B'
+AND s.ParentSystemID IS NULL
+AND s.[Key] != ''
+ORDER BY s.Name";
+
+int cacheTimeoutSeconds = -1; // no cache
+instances.AddFromSql(sql, cacheTimeoutSeconds).ThrowIfFailed();
+
+// return
+return Result<bool>.ReturnSuccessfulResult(true);

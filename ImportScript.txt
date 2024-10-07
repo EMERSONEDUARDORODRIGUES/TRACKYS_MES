@@ -1,0 +1,60 @@
+      var uow = ctx.Api.CreateUnitOfWork();
+
+      // load the target product set
+      string sql = "SELECT TOP 1 * FROM tProductSet WHERE [Key] = 'PACK.B'";
+      var productSet = ctx.Api.Data.DbProductSet.Load.WithSql(sql).ThrowIfLoadFailed("Name", "Packaging");
+      var productType = ctx.Api.Data.DbProductType.Load.ByKey("SYNC").ThrowIfLoadFailed("Key", "SYNC");
+      
+      // load the product from the external excel to a data table
+      string connectionString = @"
+Provider=Microsoft.ACE.OLEDB.12.0;
+Data Source=C:\Scripts\ProductList.xls;
+Extended Properties=""Excel 12.0; HDR=Yes; IMEX=1"";
+";
+      System.Data.DataTable dt = ctx.Api.Util.Db.GetDataTable("SELECT * FROM [ProductList$]", connectionString).ThrowIfFailed();
+
+      // loop the data table
+      int productsImported = 0;
+      foreach (System.Data.DataRow row in dt.Rows)
+      {
+        // get fields from Excel row
+        string productCode = row.GetString("Code", "");
+        string productName = row.GetString("Name", "");
+        int rate = row.GetInteger("Rate", 0);
+
+        // determine if Product exists
+        var product = ctx.Api.Data.DbProduct.Load.ByProductCodeAndProductSetID(productCode, productSet.ID);
+        if (product == null)
+        {
+          // add product
+          product = ctx.Api.Data.DbProduct.Create.FromParentProductSet(productSet).ThrowIfNull("Error Creating Product From Set");
+          product.Name = productName;
+          product.ProductCode = productCode;
+          product.ProductTypeID = productType.ID;
+          product.TheoreticalRateCalculationUnitsPerMinute = rate;
+          product.Attribute01 = "0";
+          product.Attribute02 = "0";
+          product.Attribute03 = "0";
+          product.Enabled = true;
+          ctx.Api.Data.DbProduct.Save.InsertAsNew(product, uow).ThrowIfFailed();
+          
+          productsImported++;
+        }
+        else
+        {
+          // check for product type
+          if(product.ProductTypeID != productType.ID) continue;
+          
+          // update product
+          product.Name = productName;
+          product.Attribute01 = rate.ToVariantString();
+          ctx.Api.Data.DbProduct.Save.UpdateExisting(product, uow).ThrowIfFailed();
+          
+          productsImported++;
+        }
+      }
+
+      // execute the changes
+      uow.ExecuteReturnsResultObject().ThrowIfFailed();
+      ctx.Api.Util.Log.WriteInformation("Successfully Imported {0:N0} products.".FormatWith(productsImported), "Lab 15");
+      return true;

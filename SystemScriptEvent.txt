@@ -1,0 +1,8 @@
+      // load the event that just started
+      var ev = context.Api.Data.DbEvent.Load.ByID(context.EventID).ThrowIfLoadFailed("ID", context.EventID);
+      
+      // modify its Notes property
+      ev.Notes = "Note automatically added.";
+            
+      // save
+      context.Api.Data.DbEvent.Save.UpdateExisting(ev).ThrowIfFailed();

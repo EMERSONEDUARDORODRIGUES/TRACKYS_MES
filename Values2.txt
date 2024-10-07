@@ -1,0 +1,9 @@
+// add system ID from instance
+values["SystemID"] = instanceID;
+
+// add oee calc ID from system ID
+var calc = this.Api.Data.DbOeeCalculation.Load.TopBySystemID(instanceID).ThrowIfLoadFailed("OeeCalc.SystemID", instanceID);
+values["OeeCalculationID"] = calc.ID;
+
+// return
+return Result<bool>.ReturnSuccessfulResult(true);

@@ -1,0 +1,2 @@
+      this.Ets.HasPermission("set", "item", "optional:action");
+      this.Ets.Api.User.HasPermission("login", "password", "permissionSet", "permissionItem", "optional:permissionAction");
