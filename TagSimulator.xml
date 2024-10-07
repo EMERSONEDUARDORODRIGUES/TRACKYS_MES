@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tagSimulator>
+	<accessName name="Soda Line 01 PLC">
+		<tagGroup name="Soda Line 01">
+			<tag name="SL1.CURRENT_JOB"/>
+		</tagGroup>
+		<tagGroup name="Filler">
+			<tag name="SL1.FILLER.WATER"/>
+			<tag name="SL1.FILLER.NO_CANS"/>
+			<tag name="SL1.FILLER.NO_SODA"/>
+			<tag name="SL1.FILLER.TIPPED_CAN"/>
+		</tagGroup>
+		<tagGroup name="Labeler">
+			<tag name="SL1.LABELER.LABEL_JAM"/>
+			<tag name="SL1.LABELER.NO_LABELS"/>
+		</tagGroup>
+		<tagGroup name="Casepacker">
+			<tag name="SL1.CASE.PRODUCT_OUT_OF_POSITION"/>
+		</tagGroup>
+		<tagGroup name="Availability Loss">
+			<tag name="SL1.AL.BREAK"/>
+			<tag name="SL1.AL.MAINTENANCE"/>
+			<tag name="SL1.AL.CHANGEOVER"/>
+		</tagGroup>
+		<tagGroup name="System Not Scheduled">
+			<tag name="SL1.SNS.MANUAL"/>
+		</tagGroup>
+		<tagGroup name="Product">
+			<tag name="SL1.PRODUCT.CANS_PER_MINUTE"/>
+			<tag name="SL1.PRODUCT.SECONDS_PER_CAN"/>
+			<tag name="SL1.PRODUCT.CANS_PER_CASE"/>
+			<tag name="SL1.PRODUCT.CONTAINER_SIZE"/>
+		</tagGroup>
+		<tagGroup name="OEE Counters">
+			<tag name="SL1.OEE.GOOD_CASES" incrementSeconds="35" incrementStep="4" incrementReset="200"/>
+			<tag name="SL1.OEE.BAD_CANS.FILLER" incrementSeconds="38" incrementStep="2" incrementReset="200"/>
+			<tag name="SL1.OEE.BAD_CANS.LABELER" incrementSeconds="39" incrementStep="3" incrementReset="200"/>
+		</tagGroup>
+		<tag name="SL1.CURRENT_JOB"/>
+		<tag name="SL1.PRODUCT.CONTAINER_SIZE"/>
+	</accessName>
+	<accessName name="Soda Line 02 PLC">
+		<tagGroup name="Soda Line 02">
+			<tag name="SL2.FILLER.NO_SODA"/>
+		</tagGroup>
+	</accessName>
+</tagSimulator>
